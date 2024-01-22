@@ -9,7 +9,7 @@ class TodoModel {
     if (json['tasks'] != null) {
       tasks = <Tasks>[];
       json['tasks'].forEach((v) {
-        tasks!.add( Tasks.fromJson(v));
+        tasks!.add(Tasks.fromJson(v));
       });
     }
     pageNumber = json['pageNumber'];
@@ -17,13 +17,25 @@ class TodoModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     if (tasks != null) {
       data['tasks'] = tasks!.map((v) => v.toJson()).toList();
     }
     data['pageNumber'] = pageNumber;
     data['totalPages'] = totalPages;
     return data;
+  }
+
+  TodoModel copyWith(
+    List<Tasks>? tasks,
+    int? pageNumber,
+    int? totalPages,
+  ) {
+    return TodoModel(
+      tasks: tasks??this.tasks,
+      pageNumber: pageNumber??this.pageNumber,
+      totalPages: totalPages??this.totalPages,
+    );
   }
 }
 

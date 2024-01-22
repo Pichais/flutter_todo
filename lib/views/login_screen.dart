@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_todo/bloc/home_bloc/home_bloc.dart';
 import 'package:flutter_todo/bloc/login_bloc/login_bloc.dart';
 import 'package:flutter_todo/views/home_screen.dart';
 import 'package:lottie/lottie.dart';
@@ -30,15 +31,19 @@ class LoginScreen extends StatelessWidget {
       listener: (context, state) {
         if (state.pinCode.length == 6) {
           if (state.pinCode == '120542') {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => const HomeScreen()));
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>  BlocProvider(
+                        create: (context) => HomeBloc(),
+                        child: const HomeScreen(),
+                      )),
+            );
           } else {
             const snackBar = SnackBar(
-            content: Text('PIN is was worng please try gain !!!'),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              content: Text('PIN is was worng please try gain !!!'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
-          
         }
       },
       builder: (context, state) {
@@ -138,10 +143,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
 // 
-
-
 //  TextField(
 //                       decoration: InputDecoration(
 //                         hintText: 'Username',

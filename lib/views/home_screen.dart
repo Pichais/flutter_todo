@@ -11,6 +11,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _tabs = [
+    const Tab(text: 'TODO'),
+    const Tab(text: 'DOING'),
+    const Tab(text: 'DONE'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +23,55 @@ class _HomeScreenState extends State<HomeScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.list), text: 'Todo'),
-              Tab(icon: Icon(Icons.hourglass_empty), text: 'Doing'),
-              Tab(icon: Icon(Icons.done), text: 'Done'),
+          backgroundColor: Colors.white10,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight - 8.0),
+            child: Container(
+              height: kToolbarHeight - 8.0,
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25), // Shadow color
+                    spreadRadius: 1, // Spread radius
+                    blurRadius: 3, // Blur radius
+                    offset: const Offset(0, 2), // Changes position of shadow
+                  ),
+                ],
+              ),
+              child: TabBar(
+                labelStyle: TextStyle(color: Colors.white),
+                indicatorSize: TabBarIndicatorSize.tab,
+                isScrollable: false,
+                tabs: _tabs,
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80.0),
+                    color: Colors.green.shade300),
+              ),
+            ),
+          ),
+          title: const Text(
+            'TODO APPLICATION',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          flexibleSpace: Stack(
+            fit: StackFit.expand,
+            children: [
+              Opacity(
+                opacity: 0.2, // Adjust the opacity as needed
+                child: Image.asset(
+                  "images/panda3.jpg", // Replace with your image asset
+                  fit: BoxFit.cover, // This will fill the background
+                ),
+              ),
+              // You can add more widgets here if you want to add more content over the image
             ],
           ),
-          title: const Text('TODO APPLICATION APP'),
-          centerTitle: true,
         ),
         body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             TabTodo(),
             TabDoing(),
@@ -38,44 +81,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    // return const Scaffold(
-    //   body: SafeArea(
-    //     child: Column(
-    //       mainAxisSize: MainAxisSize.min,
-    //       children: [
-    //        Text('Home Screen',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-    //        DefaultTabController(
-    //         length: 3,
-    //         child: TabBar(
-    //         tabs: [
-    //           Tab(icon: Icon(Icons.format_list_bulleted_rounded),child: Text('TODO')),
-    //           Tab(icon: Icon(Icons.hourglass_empty),child: Text('DOING')),
-    //           Tab(icon: Icon(Icons.done_rounded),child: Text('DONE')),
-    //         ],
-    //                     ),
-    //        ),
-
-    //   ElevatedButton(
-    //     onPressed: () {
-    //      Navigator.pushAndRemoveUntil(
-    // context,
-    // MaterialPageRoute(
-    //     builder: (BuildContext context) => BlocProvider(
-    //           create: (context) => LoginBloc(),
-    //           child: const LoginScreen(),
-    //         )),
-    // (route) => false);
-    //     },
-    //     style: ElevatedButton.styleFrom(
-    //       backgroundColor: Colors.grey.shade100,
-    //       minimumSize: const Size(double.infinity,
-    //           50), // double.infinity is the width and 50 is the height
-    //     ),
-    //     child: const Text('Log Out'),
-    //       //   ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

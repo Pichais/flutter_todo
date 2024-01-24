@@ -1,16 +1,11 @@
 # flutter_todo
 
-A new Flutter project.
-
 ## Getting Started
 
 This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+If you have cloned it already, you can run it immediately (assuming you have already installed Flutter and Dart).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+The PIN for accessing the application is '120542'.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This app consists of a main page with three functions: TODO, DOING, DONE. Each page contains 10 items and loads more data if there are still ITEMS remaining in the API. The functionality of each Card item is such that you can click on the card to view details of the item, and you can slide to delete the item.

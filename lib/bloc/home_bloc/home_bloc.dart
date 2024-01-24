@@ -15,6 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, Homestate> {
     on<LoadDoingBloc>(_onLoadDoingData);
     on<LoadDoneBloc>(_onLoadDoneData);
     on<LoadMoreDataBloc>(_onLoadMoreData);
+    on<ToDeleteDataBloc>(_onDeleteBloc);
   }
 
   FutureOr<void> _onLoadTodoData(
@@ -23,7 +24,6 @@ class HomeBloc extends Bloc<HomeEvent, Homestate> {
     try {
       var response =
           await TodoService().fetchTodos(status: "TODO", offset: offset);
-      // print('respoin ${response}');
       TodoModel todoModel = TodoModel.fromJson(response);
       emit(FinishState(
         tasks: todoModel.tasks!,
@@ -38,13 +38,35 @@ class HomeBloc extends Bloc<HomeEvent, Homestate> {
   FutureOr<void> _onLoadDoingData(
       LoadDoingBloc event, Emitter<Homestate> emit) async {
     offset = 0;
-    await TodoService().fetchTodos(status: "DOING", offset: offset);
+    try {
+      var response =
+          await TodoService().fetchTodos(status: "DOING", offset: offset);
+      TodoModel todoModel = TodoModel.fromJson(response);
+      emit(FinishState(
+        tasks: todoModel.tasks!,
+        pageNumber: todoModel.pageNumber!,
+        totalPages: todoModel.totalPages!,
+      ));
+    } catch (e) {
+      emit(ErrorState());
+    }
   }
 
   FutureOr<void> _onLoadDoneData(
       LoadDoneBloc event, Emitter<Homestate> emit) async {
     offset = 0;
-    await TodoService().fetchTodos(status: "DONE", offset: offset);
+    try {
+      var response =
+          await TodoService().fetchTodos(status: "DONE", offset: offset);
+      TodoModel todoModel = TodoModel.fromJson(response);
+      emit(FinishState(
+        tasks: todoModel.tasks!,
+        pageNumber: todoModel.pageNumber!,
+        totalPages: todoModel.totalPages!,
+      ));
+    } catch (e) {
+      emit(ErrorState());
+    }
   }
 
   FutureOr<void> _onLoadMoreData(
@@ -57,8 +79,8 @@ class HomeBloc extends Bloc<HomeEvent, Homestate> {
         offset += 1;
       }
       try {
-        var newData =
-            await TodoService().fetchTodos(status: "TODO", offset: offset);
+        var newData = await TodoService()
+            .fetchTodos(status: event.eventTosentAPI, offset: offset);
         TodoModel newModel = TodoModel.fromJson(newData);
         if (newModel.tasks != null && newModel.tasks!.isNotEmpty) {
           offset++;
@@ -79,4 +101,18 @@ class HomeBloc extends Bloc<HomeEvent, Homestate> {
       }
     }
   }
+
+  FutureOr<void> _onDeleteBloc(
+      ToDeleteDataBloc event, Emitter<Homestate> emit) {
+        if(state is FinishState){
+          List<Tasks>  newListTasks = [];
+          var currentState = state as FinishState;
+          currentState.tasks.forEach((element) { 
+            if(event.id != element.id){
+              newListTasks.add(element);
+            }
+          });
+          emit(currentState.copyWith(tasks: newListTasks));
+        }
+      }
 }
